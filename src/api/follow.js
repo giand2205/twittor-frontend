@@ -1,8 +1,8 @@
 import { API_HOST } from "../utils/constant";
 import { getTokenApi } from "./auth";
 
-export function getUserApi(id) {
-  const url = `${API_HOST}/view-profile?id=${id}`;
+export function checkFollowApi(idUser) {
+  const url = `${API_HOST}/consult-relation?id=${idUser}`;
   const params = {
     headers: {
       "Content-Type": "application/json",
@@ -12,8 +12,6 @@ export function getUserApi(id) {
 
   return fetch(url, params)
     .then((response) => {
-      // eslint-disable-next-line no-throw-literal
-      if (response.status >= 400) throw null;
       return response.json();
     })
     .then((result) => {
@@ -24,18 +22,14 @@ export function getUserApi(id) {
     });
 }
 
-export function uploadBannerApi(file) {
-  const url = `${API_HOST}/upload-banner`;
-
-  const formData = new FormData();
-  formData.append("banner", file);
-
+export function followUserApi(idUser) {
+  const url = `${API_HOST}/up-relation?id=${idUser}`;
   const params = {
     method: "POST",
     headers: {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${getTokenApi()}`,
     },
-    body: formData,
   };
 
   return fetch(url, params)
@@ -50,18 +44,14 @@ export function uploadBannerApi(file) {
     });
 }
 
-export function uploadAvatarApi(file) {
-  const url = `${API_HOST}/upload-avatar`;
-
-  const formData = new FormData();
-  formData.append("avatar", file);
-
+export function unFollowUserApi(idUser) {
+  const url = `${API_HOST}/down-relation?id=${idUser}`;
   const params = {
-    method: "POST",
+    method: "DELETE",
     headers: {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${getTokenApi()}`,
     },
-    body: formData,
   };
 
   return fetch(url, params)
@@ -70,25 +60,6 @@ export function uploadAvatarApi(file) {
     })
     .then((result) => {
       return result;
-    })
-    .catch((err) => {
-      return err;
-    });
-}
-
-export function updateProfileApi(data) {
-  const url = `${API_HOST}/update-profile`;
-  const params = {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${getTokenApi()}`,
-    },
-    body: JSON.stringify(data),
-  };
-
-  return fetch(url, params)
-    .then((response) => {
-      return response;
     })
     .catch((err) => {
       return err;

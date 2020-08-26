@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import LogoWhite from "../../assets/png/logo-white.png";
@@ -11,10 +11,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { logoutApi } from "../../api/auth";
 import useAuth from "../../hooks/useAuth";
+import TweetModal from "../Modal/TweetModal";
+
 import "./LeftMenu.scss";
 
 export default function LeftMenu(props) {
   const { setRefreshCheckLogin } = props;
+  const [showModal, setShowModal] = useState(false);
   const user = useAuth();
 
   const logout = () => {
@@ -38,7 +41,9 @@ export default function LeftMenu(props) {
         <FontAwesomeIcon icon={faPowerOff} /> Cerrar sesión
       </Link>
 
-      <Button>Twittoar</Button>
+      <Button onClick={() => setShowModal(true)}>Twittoar</Button>
+
+      <TweetModal show={showModal} setShow={setShowModal} />
     </div>
   );
 }

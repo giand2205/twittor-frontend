@@ -7,12 +7,17 @@ import { getUserApi } from "../../api/user";
 import { toast } from "react-toastify";
 import useAuth from "../../hooks/useAuth";
 import InfoUser from "../../components/User/InfoUser";
+import { getUserTweetApi } from "../../api/tweet";
+import ListTweets from "../../components/ListTweets";
 
 import "./User.scss";
 
 function User(props) {
   const { match } = props;
   const [user, setUser] = useState(null);
+  const [tweets, setTweets] = useState(null);
+  const [page, setPage] = useState(1);
+  const [loadingTweets, setLoadingTweets] = useState(false);
   const { params } = match;
   const loggedUser = useAuth();
 
@@ -29,6 +34,31 @@ function User(props) {
       });
   }, [params]);
 
+  useEffect(() => {
+    getUserTweetApi(params.id, 1)
+      .then((response) => {
+        setTweets(response);
+      })
+      .catch(() => {
+        setTweets([]);
+      });
+  }, [params]);
+
+  const moreData = () => {
+    const pageTemp = page + 1;
+    setLoadingTweets(true);
+
+    getUserTweetApi(params.id, pageTemp).then((response) => {
+      if (!response) {
+        setLoadingTweets(0);
+      } else {
+        setTweets([...tweets, ...response]);
+        setPage(pageTemp);
+        setLoadingTweets(false);
+      }
+    });
+  };
+
   return (
     <BasicLayout className="user">
       <div className="user__title">
@@ -38,7 +68,23 @@ function User(props) {
       </div>
       <BannerAvatar user={user} loggedUser={loggedUser} />
       <InfoUser user={user} />
-      <div className="user__tweets">Lista de Tweets</div>
+      <div className="user__tweets">
+        <h3>Tweets</h3>
+        {tweets && <ListTweets tweets={tweets} />}
+        <Button onClick={moreData}>
+          {!loadingTweets ? (
+            loadingTweets !== 0 && "Obtener más Tweets"
+          ) : (
+            <Spinner
+              as="span"
+              animation="grow"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+            />
+          )}
+        </Button>
+      </div>
     </BasicLayout>
   );
 }
