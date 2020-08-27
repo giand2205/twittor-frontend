@@ -13,7 +13,7 @@ import ListTweets from "../../components/ListTweets";
 import "./User.scss";
 
 function User(props) {
-  const { match } = props;
+  const { match, setRefreshCheckLogin } = props;
   const [user, setUser] = useState(null);
   const [tweets, setTweets] = useState(null);
   const [page, setPage] = useState(1);
@@ -60,7 +60,7 @@ function User(props) {
   };
 
   return (
-    <BasicLayout className="user">
+    <BasicLayout className="user" setRefreshCheckLogin={setRefreshCheckLogin}>
       <div className="user__title">
         <h2>
           {user ? `${user.name} ${user.lastName}` : "Este usuario no existe"}

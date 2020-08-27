@@ -28,6 +28,7 @@ export default function EditUserForm(props) {
 
   const [loading, setLoading] = useState(false);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const onDropBanner = useCallback((acceptedFile) => {
     const file = acceptedFile[0];
     setBannerUrl(URL.createObjectURL(file));
@@ -44,6 +45,7 @@ export default function EditUserForm(props) {
     onDrop: onDropBanner,
   });
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const onDropAvatar = useCallback((acceptedFile) => {
     const file = acceptedFile[0];
     setAvatarUrl(URL.createObjectURL(file));
